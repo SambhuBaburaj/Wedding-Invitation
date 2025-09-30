@@ -46,13 +46,13 @@ function initScrollAnimations() {
         observer.observe(el);
     });
 
-    const slideLeftElements = document.querySelectorAll('.hero-text, .photo-1');
+    const slideLeftElements = document.querySelectorAll('.hero-text, .photo-1, .photo-3, .photo-5');
     slideLeftElements.forEach(el => {
         el.classList.add('slide-in-left');
         observer.observe(el);
     });
 
-    const slideRightElements = document.querySelectorAll('.hero-images, .photo-2');
+    const slideRightElements = document.querySelectorAll('.hero-images, .photo-2, .photo-4, .photo-6');
     slideRightElements.forEach(el => {
         el.classList.add('slide-in-right');
         observer.observe(el);
@@ -221,6 +221,81 @@ function initImageHoverEffects() {
     });
 }
 
+// Photo Popup Functionality
+function initPhotoPopup() {
+    // Create popup modal
+    const popup = document.createElement('div');
+    popup.className = 'photo-popup';
+    popup.innerHTML = `
+        <div class="popup-backdrop"></div>
+        <div class="popup-content">
+            <img src="" alt="" class="popup-image">
+            <button class="popup-close">&times;</button>
+            <button class="popup-prev">❮</button>
+            <button class="popup-next">❯</button>
+        </div>
+    `;
+    document.body.appendChild(popup);
+
+    const popupImage = popup.querySelector('.popup-image');
+    const closeBtn = popup.querySelector('.popup-close');
+    const prevBtn = popup.querySelector('.popup-prev');
+    const nextBtn = popup.querySelector('.popup-next');
+    const backdrop = popup.querySelector('.popup-backdrop');
+
+    // Get all photo items
+    const photoItems = document.querySelectorAll('.photo-item img');
+    let currentIndex = 0;
+
+    // Add click listeners to photos
+    photoItems.forEach((img, index) => {
+        img.addEventListener('click', () => {
+            currentIndex = index;
+            showPopup(img.src, img.alt);
+        });
+        img.style.cursor = 'pointer';
+    });
+
+    function showPopup(src, alt) {
+        popupImage.src = src;
+        popupImage.alt = alt;
+        popup.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hidePopup() {
+        popup.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function showNext() {
+        currentIndex = (currentIndex + 1) % photoItems.length;
+        const nextImg = photoItems[currentIndex];
+        showPopup(nextImg.src, nextImg.alt);
+    }
+
+    function showPrev() {
+        currentIndex = (currentIndex - 1 + photoItems.length) % photoItems.length;
+        const prevImg = photoItems[currentIndex];
+        showPopup(prevImg.src, prevImg.alt);
+    }
+
+    // Event listeners
+    closeBtn.addEventListener('click', hidePopup);
+    backdrop.addEventListener('click', hidePopup);
+    nextBtn.addEventListener('click', showNext);
+    prevBtn.addEventListener('click', showPrev);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (popup.classList.contains('active')) {
+            if (e.key === 'Escape') hidePopup();
+            if (e.key === 'ArrowRight') showNext();
+            if (e.key === 'ArrowLeft') showPrev();
+        }
+    });
+}
+
 // Loading Screen
 function initLoadingScreen() {
     const loading = document.createElement('div');
@@ -352,6 +427,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
     initCalendarButton();
     initImageHoverEffects();
+    initPhotoPopup();
     initTextAnimations();
     addNotificationStyles();
     createFloatingBotanicals();
