@@ -371,6 +371,27 @@ section {
     margin-bottom: 15px;
 }
 
+.location-link {
+    color: #5A6650;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(90, 102, 80, 0.1);
+}
+
+.location-link:hover {
+    color: #4A5640;
+    background: rgba(90, 102, 80, 0.2);
+    border-color: rgba(90, 102, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(90, 102, 80, 0.2);
+}
+
 .detail-note {
     color: #C8A882;
     font-style: italic;
