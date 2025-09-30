@@ -24,6 +24,28 @@ function initParallaxEffect() {
     });
 }
 
+// Photo Gallery Side Animations
+function initPhotoGalleryAnimations() {
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const photoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, observerOptions);
+
+    // Observe all photo items
+    const photoItems = document.querySelectorAll('.photo-item');
+    photoItems.forEach(item => {
+        photoObserver.observe(item);
+    });
+}
+
 // Scroll-triggered Animations
 function initScrollAnimations() {
     const observerOptions = {
@@ -46,13 +68,13 @@ function initScrollAnimations() {
         observer.observe(el);
     });
 
-    const slideLeftElements = document.querySelectorAll('.hero-text, .photo-1, .photo-3, .photo-5');
+    const slideLeftElements = document.querySelectorAll('.hero-text');
     slideLeftElements.forEach(el => {
         el.classList.add('slide-in-left');
         observer.observe(el);
     });
 
-    const slideRightElements = document.querySelectorAll('.hero-images, .photo-2, .photo-4, .photo-6');
+    const slideRightElements = document.querySelectorAll('.hero-images');
     slideRightElements.forEach(el => {
         el.classList.add('slide-in-right');
         observer.observe(el);
@@ -425,6 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initLoadingScreen();
     initParallaxEffect();
     initScrollAnimations();
+    initPhotoGalleryAnimations(); // Add photo gallery animations
     initCalendarButton();
     initImageHoverEffects();
     initPhotoPopup();
