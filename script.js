@@ -529,6 +529,71 @@ function initAudioControls() {
     setTimeout(tryAutoplay, 100);
 }
 
+// Countdown Timer functionality
+function initCountdownTimer() {
+    const weddingDate = new Date('November 23, 2025 11:45:00').getTime();
+
+    const daysElement = document.getElementById('days');
+    const hoursElement = document.getElementById('hours');
+    const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
+
+    if (!daysElement || !hoursElement || !minutesElement || !secondsElement) return;
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = weddingDate - now;
+
+        if (distance < 0) {
+            // Wedding day has passed
+            daysElement.textContent = '0';
+            hoursElement.textContent = '00';
+            minutesElement.textContent = '00';
+            secondsElement.textContent = '00';
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Add leading zeros and animate changes (no leading zeros for days)
+        const newDays = days.toString();
+        const newHours = hours.toString().padStart(2, '0');
+        const newMinutes = minutes.toString().padStart(2, '0');
+        const newSeconds = seconds.toString().padStart(2, '0');
+
+        // Update with animation
+        if (daysElement.textContent !== newDays) {
+            animateNumberChange(daysElement, newDays);
+        }
+        if (hoursElement.textContent !== newHours) {
+            animateNumberChange(hoursElement, newHours);
+        }
+        if (minutesElement.textContent !== newMinutes) {
+            animateNumberChange(minutesElement, newMinutes);
+        }
+        if (secondsElement.textContent !== newSeconds) {
+            animateNumberChange(secondsElement, newSeconds);
+        }
+    }
+
+    function animateNumberChange(element, newValue) {
+        element.style.transform = 'scale(1.1)';
+        element.style.transition = 'transform 0.2s ease';
+
+        setTimeout(() => {
+            element.textContent = newValue;
+            element.style.transform = 'scale(1)';
+        }, 100);
+    }
+
+    // Update countdown every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initLoadingScreen();
@@ -542,6 +607,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addNotificationStyles();
     createFloatingBotanicals();
     initAudioControls(); // Add audio controls
+    initCountdownTimer(); // Add countdown timer
 
     console.log('Sambhu & Anagha wedding website initialized');
 });
