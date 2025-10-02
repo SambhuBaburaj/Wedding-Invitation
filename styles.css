@@ -836,7 +836,14 @@ section {
 }
 
 .calendar-icon {
-    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-icon svg {
+    width: 20px;
+    height: 20px;
 }
 
 /* Footer */
