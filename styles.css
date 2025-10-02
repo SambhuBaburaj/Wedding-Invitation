@@ -1499,3 +1499,111 @@ section {
         right: -20px;
     }
 }
+
+/* Floating Mute Button */
+.mute-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                0 4px 16px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1000;
+    user-select: none;
+}
+
+.mute-button:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+                0 6px 20px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.mute-button:active {
+    transform: translateY(0);
+    transition: transform 0.1s ease;
+}
+
+.mute-icon {
+    color: #5A6650;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mute-button:hover .mute-icon {
+    color: #C8A882;
+    transform: scale(1.1);
+}
+
+.mute-button.muted .mute-icon {
+    color: #e74c3c;
+}
+
+.mute-button.unmuted .mute-icon svg {
+    animation: pulse-volume 2s ease-in-out infinite;
+}
+
+@keyframes pulse-volume {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Unmuted state - show regular volume icon */
+.mute-button.unmuted .mute-icon svg path:nth-child(2),
+.mute-button.unmuted .mute-icon svg path:nth-child(3) {
+    display: none;
+}
+
+/* Muted state - show crossed out volume icon */
+.mute-button.muted .mute-icon svg path:nth-child(2),
+.mute-button.muted .mute-icon svg path:nth-child(3) {
+    display: block;
+}
+
+/* Mobile responsive mute button */
+@media (max-width: 768px) {
+    .mute-button {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .mute-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mute-button {
+        bottom: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .mute-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+}

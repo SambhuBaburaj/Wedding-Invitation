@@ -442,6 +442,93 @@ function initTouchGestures() {
     });
 }
 
+// Audio functionality
+function initAudioControls() {
+    const audio = document.getElementById('backgroundAudio');
+    const muteButton = document.getElementById('muteButton');
+    let isPlaying = false;
+    let isMuted = false;
+
+    if (!audio || !muteButton) return;
+
+    // Set initial volume
+    audio.volume = 0.3;
+
+    // Auto-play with user interaction fallback
+    function tryAutoplay() {
+        const playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                isPlaying = true;
+                updateMuteButtonState();
+            }).catch(() => {
+                // Auto-play failed, wait for user interaction
+                isPlaying = false;
+                updateMuteButtonState();
+            });
+        }
+    }
+
+    // Update mute button appearance
+    function updateMuteButtonState() {
+        muteButton.classList.remove('muted', 'unmuted');
+
+        if (isMuted || !isPlaying) {
+            muteButton.classList.add('muted');
+        } else {
+            muteButton.classList.add('unmuted');
+        }
+    }
+
+    // Mute button click handler
+    muteButton.addEventListener('click', function() {
+        if (!isPlaying) {
+            // If audio isn't playing, start it
+            const playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isPlaying = true;
+                    isMuted = false;
+                    audio.muted = false;
+                    updateMuteButtonState();
+                }).catch(() => {
+                    showNotification('Unable to play audio. Please check your browser settings.', 'error');
+                });
+            }
+        } else {
+            // Toggle mute/unmute
+            isMuted = !isMuted;
+            audio.muted = isMuted;
+            updateMuteButtonState();
+
+        }
+    });
+
+    // Handle audio events
+    audio.addEventListener('play', () => {
+        isPlaying = true;
+        updateMuteButtonState();
+    });
+
+    audio.addEventListener('pause', () => {
+        isPlaying = false;
+        updateMuteButtonState();
+    });
+
+    audio.addEventListener('ended', () => {
+        isPlaying = false;
+        updateMuteButtonState();
+    });
+
+    // Initial setup
+    updateMuteButtonState();
+
+    // Try to autoplay immediately
+    setTimeout(tryAutoplay, 100);
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initLoadingScreen();
@@ -454,6 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initTextAnimations();
     addNotificationStyles();
     createFloatingBotanicals();
+    initAudioControls(); // Add audio controls
 
     console.log('Sambhu & Anagha wedding website initialized');
 });
